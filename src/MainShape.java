@@ -27,7 +27,7 @@ public class MainShape {
                             try {
                                 double radiusOfCircle = scanner.nextInt();
                                 if (radiusOfCircle < 0) {
-                                    throw new Exception("Radius is greater than 0 ");
+                                    throw new Exception("Radius should be greater than 0 ");
                                 }
                                 Circle circle = new Circle();
                                 System.out.println("Area of the Circle is " + circle.area(radiusOfCircle));
@@ -47,13 +47,13 @@ public class MainShape {
                                 System.out.println("Enter the length: ");
                                 double length = scanner.nextInt();
                                 if (length < 0) {
-                                    throw new Exception("Length is greater than 0 ");
+                                    throw new Exception("Length should be greater than 0 ");
                                 }
 
                                 System.out.println("Enter the breadth: ");
                                 double breadth = scanner.nextInt();
                                 if (breadth < 0) {
-                                    throw new Exception("Breadth is greater than 0 ");
+                                    throw new Exception("Breadth should be greater than 0 ");
                                 }
 
                                 Rectangle rectangle = new Rectangle();
