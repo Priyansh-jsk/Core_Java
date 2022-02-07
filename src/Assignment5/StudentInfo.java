@@ -13,34 +13,9 @@ public class StudentInfo implements Serializable {     //define student properti
 		this.dOB = dOB;
 		this.address = address;
 	}
-	
-	// Getter and Setter
-	public String getfirstName() {
-		return firstName;
-	}
-
-	public void setfirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getdOB() {
-		return dOB;
-	}
-
-	public void setdOB(String dOB) {
-		this.dOB = dOB;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
 
 	// Here we will call toString method
 	public String toString() {
-		return " Student firstName= " + firstName + ", Student dOB= " + dOB + ", Address= " + address;
+		return " Student firstName= " + firstName + ", Student dOB= " + dOB + ", Address= " + address ;
 	}
 }
