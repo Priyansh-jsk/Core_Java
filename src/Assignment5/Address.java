@@ -4,19 +4,19 @@ import java.io.Serializable;
 import java.util.*;
 
 public class Address implements Serializable {      // properties of Address class declared as private
-	private String City;
-	private String State;
+	private String city;
+	private String state;
 	private int pinCode;
 	private String country;
 
-	public Address(String City, String State, int pinCode, String country) {
-		this.City = City;
-		this.State = State;
+	public Address(String city, String state, int pinCode, String country) {
+		this.city = city;
+		this.state = state;
 		this.pinCode = pinCode;
 		this.country = country;
 	}
 
 	public String toString() {
-		return "Address City=" + City + ",State=" + State + pinCode + pinCode + "Country=" + country;
+		return "Address City=" + city + ",State=" + state + pinCode + pinCode + "Country=" + country;
 	}
 }
