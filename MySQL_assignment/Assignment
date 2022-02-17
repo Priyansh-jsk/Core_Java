@@ -219,20 +219,19 @@ mysql> SELECT SNAME FROM  Salespeople
 +---------+
 
 6.List names of all customers matched with the salespeople serving them.
-mysql> SELECT S.SNAME,S.CITY,C.CNAME FROM
-    -> Salespeople S, Customers C WHERE
-    -> S.SNUM=C.SNUM;
-+---------+-----------+----------+
-| SNAME   | CITY      | CNAME    |
-+---------+-----------+----------+
-| Peel    | London    | Hoffman  |
-| AxelRod | New York  | Giovanni |
-| Serres  | SanJose   | Liu      |
-| Serres  | SanJose   | Grass    |
-| Peel    | London    | Clemens  |
-| Motika  | London    | Pereira  |
-| Rifkin  | Barcelona | Cisneros |
-+---------+-----------+----------+
+mysql> SELECT CNAME FROM Customers WHERE
+    -> SNUM IN(SELECT SNUM FROM Salespeople);
++----------+
+| CNAME    |
++----------+
+| Hoffman  |
+| Giovanni |
+| Liu      |
+| Grass    |
+| Clemens  |
+| Pereira  |
+| Cisneros |
++----------+
 
 7.Find the names and numbers of all salespeople who have more than one customer.
 
@@ -303,6 +302,16 @@ mysql> SELECT * FROM Orders
 
 15.Give the sums of the amounts from the Orders table, grouped by date, eliminating all those dates where the SUM was not at least 2000 above
 the maximum Amount.
+mysql> SELECT ODATE, sum(AMT) FROM Orders
+    -> GROUP BY ODATE;
++------------+--------------------+
+| ODATE      | sum(AMT)           |
++------------+--------------------+
+| 1990-10-03 |  8944.590208053589 |
+| 1990-10-04 |   1788.97998046875 |
+| 1990-10-05 |               4723 |
+| 1990-10-06 | 11201.829833984375 |
++------------+--------------------+
 
 16.Select all orders that had amounts that were greater than at least one of the orders from October 6.
 mysql> SELECT * FROM Orders WHERE AMT >
@@ -965,6 +974,98 @@ mysql> SELECT * FROM Customers
 | 2007 | Pereira  | Rome    |    100 | 1004 |
 +------+----------+---------+--------+------+
 
-92.
+92.On which days has Hoffman placed orders?
+mysql> SELECT C.CNAME,ONUM,ODATE FROM Customers
+    -> C, Orders O WHERE C.CNUM=O.CNUM AND C.CNAME='Hoffman';
++---------+------+------------+
+| CNAME   | ONUM | ODATE      |
++---------+------+------------+
+| Hoffman | 3003 | 1990-10-03 |
++---------+------+------------+
 
+93.Which salesmen have no orders between 10/03/1990 and 10/05/1990?
+mysql> SELECT DISTINCT S.SNAME FROM Salespeople s, Orders o WHERE
+    -> s.SNUM=o.SNUM AND o.ODATE != 1990-10-03 AND 1990-10-05;
++---------+
+| SNAME   |
++---------+
+| Rifkin  |
+| Motika  |
+| Peel    |
+| Serres  |
+| AxelRod |
++---------+
 
+94.How many salespersons have succeeded in getting orders?	
+
+95.How many customers have placed orders?
+mysql> SELECT count(CNUM) AS count FROM Customers WHERE
+    -> CNUM IN(SELECT CNUM FROM Orders GROUP BY CNUM);
++-------+
+| count |
++-------+
+|     7 |
++-------+
+
+96.On which date has each salesman booked an order of maximum value?
+mysql> SELECT ONUM, ODATE FROM Orders WHERE AMT
+    -> IN(SELECT max(AMT) FROM Orders GROUP BY SNUM);
++------+------------+
+| ONUM | ODATE      |
++------+------------+
+| 3002 | 1990-10-03 |
+| 3005 | 1990-10-03 |
+| 3006 | 1990-10-03 |
+| 3009 | 1990-10-04 |
+| 3011 | 1990-10-06 |
++------+------------+
+
+97.Who is the most successful salesperson?
+
+98.Which customers have the same rating?
+mysql> SELECT * FROM Customers ORDER BY RATING;
++------+----------+---------+--------+------+
+| CNUM | CNAME    | CITY    | RATING | SNUM |
++------+----------+---------+--------+------+
+| 2001 | Hoffman  | London  |    100 | 1001 |
+| 2006 | Clemens  | London  |    100 | 1001 |
+| 2007 | Pereira  | Rome    |    100 | 1004 |
+| 2002 | Giovanni | Rome    |    200 | 1003 |
+| 2003 | Liu      | SanJose |    200 | 1002 |
+| 2004 | Grass    | Berlin  |    300 | 1002 |
+| 2008 | Cisneros | SanJose |    300 | 1007 |
++------+----------+---------+--------+------+
+
+99.Find all orders greater than the average for October 4th.
+
+100.List all customers with ratings above Grass’s average.
+mysql> SELECT CNAME,RATING FROM Customers WHERE
+    -> RATING >= (SELECT avg(RATING) FROM Customers WHERE CNAME='Grass');
++----------+--------+
+| CNAME    | RATING |
++----------+--------+
+| Grass    |    300 |
+| Cisneros |    300 |
++----------+--------+
+
+101.Which customers have above average orders?
+
+102.Select the total amount in orders for each salesperson for which the total is greater than the amount of the largest order in the table.
+
+103.Give names and numbers of all salespersons that have more than one customer?
+
+104.Select all salespeople by name and number who have customers in their city whom they don’t service.
+
+105.Does the total amount in orders by customer in Rome and London, exceed the commission paid to salesperson in London, and New York by
+more than 5 times?
+
+106.Which are the date, order number, amt and city for each salesperson (by name) for themaximum order he has obtained?
+
+107.Which salesperson is having lowest commission?
+mysql> SELECT SNAME,COMM FROM Salespeople WHERE
+    -> COMM=(SELECT min(COMM) FROM Salespeople);
++---------+------+
+| SNAME   | COMM |
++---------+------+
+| AxelRod |   10 |
++---------+------+
